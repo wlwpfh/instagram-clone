@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">instagram</string>
-    <string name="facebook_app_id">873009302900995</string>
-    <string name="fb_login_protocol_scheme">fb873009302900995</string>
+
     <!--    회원 가입-->
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -44,4 +43,8 @@
     <!-- etc -->
     <item name="visible" type="id" />
     <item name="masked" type="id" />
+    <!--    facebook-->
+    <string name="facebook_app_id">229863782410284</string>
+    <string name="fb_login_protocol_scheme">fb229863782410284</string>
+
 </resources>
