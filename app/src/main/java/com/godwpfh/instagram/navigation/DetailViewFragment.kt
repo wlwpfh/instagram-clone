@@ -10,16 +10,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.godwpfh.instagram.R
 import com.godwpfh.instagram.navigation.model.ContentDTO
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_detail.view.*
 import kotlinx.android.synthetic.main.item_detail.view.*
 
 class DetailViewFragment : Fragment(){
     var firestore : FirebaseFirestore? = null
+    var uid: String? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view=LayoutInflater.from(activity).inflate(R.layout.fragment_detail,container, false);
 
         firestore= FirebaseFirestore.getInstance()
+        uid=FirebaseAuth.getInstance().currentUser?.uid
 
         view.detail_fragment_recycler_view.adapter=DetailViewRecyclerViewAdapter()
         view.detail_fragment_recycler_view.layoutManager=LinearLayoutManager(activity) //보여지는 걸 linearlayout으로 보여지기 위해해
@@ -62,12 +65,41 @@ class DetailViewFragment : Fragment(){
             viewholder.detail_content_explain.text=contentDTOs!![position].explain
             viewholder.detail_heart_count.text= "Likes "+contentDTOs!![position].favoriteCount.toString()
 
+            //좋아요 버튼에 이벤트 달기
+            viewholder.detail_heart_click.setOnClickListener {
+                favoriteEvent(position)
+            }
+            //좋아요 버튼 누른 수 적용
+            if(contentDTOs!![position].favorites.containsKey(uid)){ //좋아요 버튼이 클릭
+                viewholder.detail_heart_click.setImageResource(R.drawable.ic_favorite)
+            }else{ //아직 클릭하지 않은 경우
+                viewholder.detail_heart_click.setImageResource(R.drawable.ic_favorite_border)
+            }
 
-        }
+       }
 
         override fun getItemCount(): Int {
             return contentDTOs.size
         }
 
+        fun favoriteEvent(position : Int){
+            var tsDoc = firestore?.collection("images")?.document(contentUidList[position])
+            firestore?.runTransaction {     transaction ->
+                var uid= FirebaseAuth.getInstance().currentUser?.uid
+                var contentDTO=transaction.get(tsDoc!!).toObject(ContentDTO::class.java)
+
+                if(contentDTO!!.favorites.containsKey(uid)){ //클릭 O -> 클릭 X
+                    contentDTO?.favoriteCount=contentDTO?.favoriteCount-1
+                    contentDTO.favorites.remove(uid)
+                }else{
+                    //클릭X -> 클릭 O
+                    contentDTO?.favoriteCount=contentDTO?.favoriteCount+1
+                    contentDTO?.favorites[uid!!]=true
+                }
+                //트랜잭션을 서버로 돌려주기
+                transaction.set(tsDoc, contentDTO)
+            }
+
+        }
     }
 }
