@@ -20,6 +20,10 @@ class MainActivity : AppCompatActivity(),  NavigationBarView.OnItemSelectedListe
 
         ActivityCompat.requestPermissions(this,
             arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),1)
+
+        //기본 화면 설정
+        bottom_navigation.selectedItemId=R.id.action_home
+
     }
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
