@@ -36,6 +36,7 @@ class DetailViewFragment : Fragment(){
             firestore?.collection("images")?.orderBy("timestamp")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 contentDTOs.clear()
                 contentUidList.clear()
+                if(querySnapshot == null ) return@addSnapshotListener
 
                 for(snapshot in querySnapshot!!.documents){ //들어오는 값 찍기
                     var item=snapshot.toObject(ContentDTO::class.java) //ContentDTO방식으로 casting
@@ -74,6 +75,16 @@ class DetailViewFragment : Fragment(){
                 viewholder.detail_heart_click.setImageResource(R.drawable.ic_favorite)
             }else{ //아직 클릭하지 않은 경우
                 viewholder.detail_heart_click.setImageResource(R.drawable.ic_favorite_border)
+            }
+
+            //프로필 이미지 클릭된 경우
+            viewholder.detail_profile_image.setOnClickListener {
+                var fragment=UserFragment()
+                var bundle=Bundle()
+                bundle.putString("destinationUid",contentDTOs[position].uid)
+                bundle.putString("userID",contentDTOs[position].userId)
+                fragment.arguments=bundle
+                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.main_content,fragment)?.commit()
             }
 
        }

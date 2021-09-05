@@ -56,7 +56,11 @@ class LogInActivity : AppCompatActivity() {
         //printHashKey()
         callbackManager= CallbackManager.Factory.create()
     }
+    override fun onStart(){ //자동 로그인
+        super.onStart()
+        moveMainPage(auth?.currentUser)
 
+    }
     fun printHashKey() {
         try {
             val info: PackageInfo = packageManager.getPackageInfo(packageName,PackageManager.GET_SIGNATURES)
@@ -173,6 +177,7 @@ class LogInActivity : AppCompatActivity() {
     fun moveMainPage(user: FirebaseUser?){
         if(user!=null){ //firebase에 user가 존재한다면
             startActivity(Intent(this, MainActivity::class.java));
+            finish()
         }
     }
 

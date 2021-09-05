@@ -3,6 +3,7 @@ package com.godwpfh.instagram
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity(),  NavigationBarView.OnItemSelectedListe
 
     }
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        setToolbarDefault()
         when(item.itemId){
             R.id.action_home -> {
                 var detailViewFragment=DetailViewFragment()
@@ -62,7 +64,11 @@ class MainActivity : AppCompatActivity(),  NavigationBarView.OnItemSelectedListe
         return false
     }
 
-
+    fun setToolbarDefault(){
+        toolbar_username.visibility=View.GONE
+        toolbar_back.visibility=View.GONE
+        toolbar_logo.visibility=View.VISIBLE
+    }
 }
 
 
