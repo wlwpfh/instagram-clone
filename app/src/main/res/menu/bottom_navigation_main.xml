@@ -11,11 +11,11 @@
     <item
         android:id="@+id/action_add_photo"
         android:icon="@drawable/ic_add_a_photo"
-        android:title="@string/common_open_on_phone"/>
+        android:title="@string/upload_image"/>
     <item
         android:id="@+id/action_favorite_alarm"
         android:icon="@drawable/ic_favorite_border"
-        android:title="@string/alarm_favorite"/>
+        android:title="@string/favorite"/>
     <item
         android:id="@+id/action_account"
         android:icon="@drawable/ic_account"
