@@ -1,5 +1,6 @@
 package com.godwpfh.instagram
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
@@ -9,8 +10,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import com.godwpfh.instagram.navigation.*
+import com.google.android.gms.tasks.Task
 import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(),  NavigationBarView.OnItemSelectedListener {
@@ -68,6 +73,24 @@ class MainActivity : AppCompatActivity(),  NavigationBarView.OnItemSelectedListe
         toolbar_username.visibility=View.GONE
         toolbar_back.visibility=View.GONE
         toolbar_logo.visibility=View.VISIBLE
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode==UserFragment.PICK_PROFILE_FROM_ALBUM && resultCode== Activity.RESULT_OK){
+            var imageUri=data?.data
+            var uid=FirebaseAuth.getInstance().currentUser?.uid
+            var storageRef = FirebaseStorage.getInstance().reference
+                    .child("profileUserImage").child(uid!!) //프로필 사진 저장
+            storageRef.putFile(imageUri!!).continueWithTask { task: Task<UploadTask.TaskSnapshot> ->
+                return@continueWithTask storageRef.downloadUrl
+            }.addOnSuccessListener { uri -> //return된 uri값이 넘어옴
+                var map=HashMap<String,Any>()
+                map["images"]=uri.toString()
+                FirebaseFirestore.getInstance().collection("profileUserImage").document(uid).set(map)
+
+            }
+        }
     }
 }
 
