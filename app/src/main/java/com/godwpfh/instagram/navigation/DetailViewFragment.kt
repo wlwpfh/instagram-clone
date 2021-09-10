@@ -1,5 +1,6 @@
 package com.godwpfh.instagram.navigation
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -86,7 +87,12 @@ class DetailViewFragment : Fragment(){
                 fragment.arguments=bundle
                 activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.main_content,fragment)?.commit()
             }
+            viewholder.detail_comment_click?.setOnClickListener { view ->
+                var intent=Intent(view.context, CommentActivity::class.java)
+                intent.putExtra("contentUid",contentUidList[position])
+                startActivity(intent)
 
+            }
        }
 
         override fun getItemCount(): Int {
