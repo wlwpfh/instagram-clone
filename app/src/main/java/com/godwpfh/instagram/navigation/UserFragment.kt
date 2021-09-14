@@ -17,6 +17,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.godwpfh.instagram.LogInActivity
 import com.godwpfh.instagram.MainActivity
 import com.godwpfh.instagram.R
+import com.godwpfh.instagram.navigation.model.AlarmDTO
 import com.godwpfh.instagram.navigation.model.ContentDTO
 import com.godwpfh.instagram.navigation.model.FollowDTO
 import com.google.firebase.auth.FirebaseAuth
@@ -89,7 +90,7 @@ class UserFragment : Fragment() { //내 계정에 대한 정보, 상대 계정�
                 followDTO= FollowDTO()
                 followDTO!!.followingCount=1
                 followDTO!!.followers[uid!!]=true
-
+                followerAlarm(uid!!)
                 transaction.set(tsDocFollowing,followDTO)
                 return@runTransaction
             }
@@ -101,6 +102,7 @@ class UserFragment : Fragment() { //내 계정에 대한 정보, 상대 계정�
                 //팔로잉을 하는 경우
                 followDTO?.followingCount=followDTO?.followingCount+1
                 followDTO?.followers[uid!!]=true
+                followerAlarm(uid!!)
             }
             transaction.set(tsDocFollowing, followDTO)
             return@runTransaction
@@ -157,6 +159,15 @@ class UserFragment : Fragment() { //내 계정에 대한 정보, 상대 계정�
                 }
             }
         }
+    }
+    fun followerAlarm(destinationUid :String){ //팔로우 클릭시 알람
+        var alarmDTO= AlarmDTO()
+        alarmDTO.destinationUid=destinationUid
+        alarmDTO.userId=auth?.currentUser?.email
+        alarmDTO.uid=auth?.currentUser?.uid
+        alarmDTO.kind=2
+        alarmDTO.timestamp=System.currentTimeMillis()
+        FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
     }
     fun getProfileImage(){
         firestore?.collection("profileUserImage")?.document(uid!!)?.addSnapshotListener { value, error ->

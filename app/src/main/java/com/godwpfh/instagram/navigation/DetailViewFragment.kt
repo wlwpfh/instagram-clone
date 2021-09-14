@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.godwpfh.instagram.R
+import com.godwpfh.instagram.navigation.model.AlarmDTO
 import com.godwpfh.instagram.navigation.model.ContentDTO
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -90,6 +91,7 @@ class DetailViewFragment : Fragment(){
             viewholder.detail_comment_click?.setOnClickListener { view ->
                 var intent=Intent(view.context, CommentActivity::class.java)
                 intent.putExtra("contentUid",contentUidList[position])
+                intent.putExtra("destinationUid",contentDTOs[position].uid)
                 startActivity(intent)
 
             }
@@ -112,10 +114,22 @@ class DetailViewFragment : Fragment(){
                     //클릭X -> 클릭 O
                     contentDTO?.favoriteCount=contentDTO?.favoriteCount+1
                     contentDTO?.favorites[uid!!]=true
+                    favoriteAlarm(contentDTOs[position].uid!!)
                 }
                 //트랜잭션을 서버로 돌려주기
                 transaction.set(tsDoc, contentDTO)
             }
+
+        }
+        fun favoriteAlarm(destinationUid: String){
+            var alarmDTO= AlarmDTO()
+            alarmDTO.destinationUid=destinationUid
+            alarmDTO.userId=FirebaseAuth.getInstance().currentUser?.email
+            alarmDTO.uid=FirebaseAuth.getInstance().currentUser?.uid
+            alarmDTO.kind=0
+            alarmDTO.timestamp=System.currentTimeMillis()
+            FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
+
 
         }
     }
