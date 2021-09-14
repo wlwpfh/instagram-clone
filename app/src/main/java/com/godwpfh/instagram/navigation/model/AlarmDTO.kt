@@ -7,4 +7,9 @@ data class AlarmDTO(
         var kind: Int?=null,
         var message: String?=null,
         var timestamp : Long?=null
+
+//        kind
+//                0: like
+//                1: comment
+//                2: follow
 )
