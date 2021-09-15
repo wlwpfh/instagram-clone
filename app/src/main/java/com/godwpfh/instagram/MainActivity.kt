@@ -1,8 +1,10 @@
 package com.godwpfh.instagram
 
 import android.app.Activity
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -10,10 +12,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import com.godwpfh.instagram.navigation.*
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import kotlinx.android.synthetic.main.activity_main.*
@@ -30,6 +34,7 @@ class MainActivity : AppCompatActivity(),  NavigationBarView.OnItemSelectedListe
 
         //기본 화면 설정
         bottom_navigation.selectedItemId=R.id.action_home
+        registerPushToken()
 
     }
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -74,7 +79,24 @@ class MainActivity : AppCompatActivity(),  NavigationBarView.OnItemSelectedListe
         toolbar_back.visibility=View.GONE
         toolbar_logo.visibility=View.VISIBLE
     }
+    fun registerPushToken(){
+        //기기에 따라 토큰 보내기
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
 
+            // Get new FCM registration token
+            val token = task.result
+            val uid=FirebaseAuth.getInstance().currentUser?.uid
+            val map= mutableMapOf<String,Any>()
+            map["pushToken"]=token!!
+
+            FirebaseFirestore.getInstance().collection("pushTokens").document("uid").set(map)
+
+        })
+    }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode==UserFragment.PICK_PROFILE_FROM_ALBUM && resultCode== Activity.RESULT_OK){
