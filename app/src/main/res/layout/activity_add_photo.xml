@@ -47,13 +47,5 @@
             android:id="@+id/add_photo_edit"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:layout_width="match_parent"
-        android:text="@string/upload_image"
-        android:layout_height="wrap_content"
-        android:id="@+id/add_photo_button"
-        android:layout_toRightOf="@id/add_photo_image"
-        android:layout_below="@id/photo_edit_text">
 
-    </Button>
 </RelativeLayout>
