@@ -18,19 +18,36 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        <ImageView
-            android:id="@+id/add_photo_logo_image"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:src="@drawable/logo_title"/>
-        <Button
-            android:id="@+id/add_photo_button"
-            android:layout_width="match_parent"
-            android:text="@string/upload_image"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/add_photo_logo_image"
-            android:layout_alignParentRight="true"
-            />
+
+            <ImageView
+                android:id="@+id/add_photo_back"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentLeft="true"
+                android:src="@drawable/ic_arrow_back"/>
+
+            <TextView
+                android:id="@+id/add_photo_logo_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="7dp"
+                android:layout_centerHorizontal="true"
+                android:text="새 게시물"
+                android:textSize="20dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/add_photo_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
+                android:text="공유"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:textColor="@color/blue"/>
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
     <LinearLayout
@@ -63,5 +80,10 @@
             android:id="@+id/add_photo_edit"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:orientation="horizontal"
+        android:background="@color/colorDivision"
+        />
 </RelativeLayout>
