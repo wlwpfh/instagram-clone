@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity(),  NavigationBarView.OnItemSelectedListe
     }
 
     fun setToolbarDefault(){
-        toolbar_username.visibility=View.GONE
+        //toolbar_username.visibility=View.GONE
         toolbar_back.visibility=View.GONE
         toolbar_logo.visibility=View.VISIBLE
     }

@@ -26,6 +26,8 @@ class CommentActivity : AppCompatActivity() {
 
         contentUid=intent.getStringExtra("contentUid")
         destinationUid=intent.getStringExtra("destinationUid")
+        //comment_profile_image.setImageResource();
+        //현재 접속한 나의 image사진
 
         comment_recyclerview.adapter=CommentRecyclerviewAdapter()
         comment_recyclerview.layoutManager=LinearLayoutManager(this)

@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.godwpfh.instagram.LogInActivity
 import com.godwpfh.instagram.MainActivity
 import com.godwpfh.instagram.R
 import com.godwpfh.instagram.navigation.model.AlarmDTO
@@ -44,23 +43,23 @@ class UserFragment : Fragment() { //내 계정에 대한 정보, 상대 계정�
 
         if(uid==currentUserUid){
             //내 계정 페이지일 때 - follow 버튼 -> 로그아웃 버튼으로 바꾸기
-            fragmentView?.account_follow_signout?.text=getText(R.string.signout)
+            fragmentView?.account_follow_signout?.text="프로필 편집하기"
             fragmentView?.account_follow_signout?.setOnClickListener {
                 activity?.finish()
-                startActivity(Intent(activity,LogInActivity::class.java))
-                auth?.signOut()
+                startActivity(Intent(activity,EditProfileActivity::class.java))
+
             }
 
         }else{
             //다른 사람 계정 페이지일 때 - follow버튼으로
             fragmentView?.account_follow_signout?.text=getText(R.string.follow)
             var mainactivity = (activity as MainActivity)
-            mainactivity?.toolbar_username?.text=arguments?.getString("userID")
+            //mainactivity?.toolbar_username?.text=arguments?.getString("userID")
             mainactivity?.toolbar_back?.setOnClickListener{
                 mainactivity.bottom_navigation.selectedItemId=R.id.action_home
             }
             mainactivity?.toolbar_logo?.visibility=View.GONE
-            mainactivity?.toolbar_username?.visibility=View.VISIBLE
+            //mainactivity?.toolbar_username?.visibility=View.VISIBLE
             mainactivity?.toolbar_back?.visibility=View.VISIBLE
 
             fragmentView?.account_follow_signout?.setOnClickListener {

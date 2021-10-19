@@ -15,6 +15,7 @@ import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
+import com.godwpfh.instagram.navigation.model.InfoDTO
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -24,6 +25,7 @@ import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_log_in.*
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
@@ -173,11 +175,19 @@ class LogInActivity : AppCompatActivity() {
             }
         }
     }
-
     fun moveMainPage(user: FirebaseUser?){
-        if(user!=null){ //firebase에 user가 존재한다면
+        if(user!=null){ //firebase에 uvar infoDTO= InfoDTO()
+            Toast.makeText(this, user.email, Toast.LENGTH_LONG).show();
+            var infoDTO = InfoDTO()
+            infoDTO.uid=user.uid
+            infoDTO.userID=user.email
+            infoDTO.nickname=user.email
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                infoDTO.image=getDrawable(R.drawable.ic_account).toString()
+            }
+            FirebaseFirestore.getInstance().collection("info").document().set(infoDTO)
             startActivity(Intent(this, MainActivity::class.java));
-            finish()
+
         }
     }
 
