@@ -35,6 +35,7 @@ class LogInActivity : AppCompatActivity() {
     var googleSignInClient : GoogleSignInClient? = null
     var GOOGLE_LOGIN_CODE = 9001
     var callbackManager : CallbackManager? = null
+    var user: FirebaseUser?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_in)
@@ -112,6 +113,7 @@ class LogInActivity : AppCompatActivity() {
             ?.addOnCompleteListener{ task ->
                 if(task.isSuccessful){
                     //login 3
+                    makeProfile(auth?.currentUser)
                     moveMainPage(task.result?.user)
                 }else{
                     //error message
@@ -137,6 +139,7 @@ class LogInActivity : AppCompatActivity() {
             ?.addOnCompleteListener{ task ->
                 if(task.isSuccessful){
                     //login
+                    makeProfile(auth?.currentUser)
                     moveMainPage(task.result?.user)
                 }else{
                     //error message
@@ -150,6 +153,7 @@ class LogInActivity : AppCompatActivity() {
             password_edittext.text.toString()
         )?.addOnCompleteListener { task ->
             if (task.isSuccessful) { //id가 생성되었을 때
+                makeProfile(auth?.currentUser)
                 moveMainPage(task.result?.user)
             } else if (task.exception?.message.isNullOrEmpty()) {
                 //로그인 에러 메세지 출력
@@ -177,18 +181,21 @@ class LogInActivity : AppCompatActivity() {
     }
     fun moveMainPage(user: FirebaseUser?){
         if(user!=null){ //firebase에 uvar infoDTO= InfoDTO()
-            Toast.makeText(this, user.email, Toast.LENGTH_LONG).show();
-            var infoDTO = InfoDTO()
-            infoDTO.uid=user.uid
-            infoDTO.userID=user.email
-            infoDTO.nickname=user.email
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                infoDTO.image=getDrawable(R.drawable.ic_account).toString()
-            }
-            FirebaseFirestore.getInstance().collection("info").document().set(infoDTO)
             startActivity(Intent(this, MainActivity::class.java));
 
         }
+    }
+
+    fun makeProfile(user:FirebaseUser?){
+        Toast.makeText(this, user?.email, Toast.LENGTH_LONG).show();
+        var infoDTO = InfoDTO()
+        infoDTO.uid=user?.uid
+        infoDTO.userID=user?.email
+        infoDTO.nickname=user?.email
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            infoDTO.image=getDrawable(R.drawable.ic_account).toString()
+        }
+        FirebaseFirestore.getInstance().collection("info").document(user?.uid!!).set(infoDTO)
     }
 
 }
