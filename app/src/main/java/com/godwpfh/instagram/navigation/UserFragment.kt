@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.godwpfh.instagram.LogInActivity
 import com.godwpfh.instagram.MainActivity
 import com.godwpfh.instagram.R
 import com.godwpfh.instagram.navigation.model.AlarmDTO
@@ -47,9 +48,12 @@ class UserFragment : Fragment() { //내 계정에 대한 정보, 상대 계정�
             fragmentView?.account_follow_signout?.setOnClickListener {
                 activity?.finish()
                 startActivity(Intent(activity,EditProfileActivity::class.java))
-
             }
-
+            fragmentView?.account_signout?.setOnClickListener {
+                startActivity(Intent(activity, LogInActivity::class.java))
+                auth?.signOut()
+            }
+            fragmentView?.account_email?.text=auth?.currentUser?.email
         }else{
             //다른 사람 계정 페이지일 때 - follow버튼으로
             fragmentView?.account_follow_signout?.text=getText(R.string.follow)
@@ -65,7 +69,9 @@ class UserFragment : Fragment() { //내 계정에 대한 정보, 상대 계정�
             fragmentView?.account_follow_signout?.setOnClickListener {
                 requestFollow()
             }
-       }
+            fragmentView?.account_signout?.visibility=View.GONE
+
+        }
 
         fragmentView?.account_recycler?.adapter=UserFragmentRecyclerViewAdapter()
         fragmentView?.account_recycler?.layoutManager=GridLayoutManager(activity, 3)
@@ -192,6 +198,7 @@ class UserFragment : Fragment() { //내 계정에 대한 정보, 상대 계정�
                     ContentDTOs.add(snapshot.toObject(ContentDTO::class.java)!!)
                 }
                 fragmentView?.account_post_count?.text=ContentDTOs.size.toString()
+
                 notifyDataSetChanged()
             }
         } //사진 가져오기
@@ -212,6 +219,8 @@ class UserFragment : Fragment() { //내 계정에 대한 정보, 상대 계정�
             //data mapping
             var imageview=(holder as CustomViewHolder).imageview
             Glide.with(holder.itemView.context).load(ContentDTOs[position].imageUrl).apply(RequestOptions().centerCrop()).into(imageview)
+
+            fragmentView?.account_email?.text=ContentDTOs[position].userId
         }
 
         override fun getItemCount(): Int {

@@ -7,25 +7,55 @@
 <!--개인 계정, 팔로워 등-->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp">
+        android:layout_height="120dp">
         <ImageView
             android:id="@+id/account_profile"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@drawable/ic_account"
             android:layout_alignParentLeft="true"/>
+
         <Button
             android:id="@+id/account_follow_signout"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
             android:text="@string/follow"
+            android:textColor="@color/black"
+            android:background="@drawable/button_border"
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@id/account_profile"/>
 
+
+
+        <TextView
+            android:id="@+id/account_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="내 이메일 계정"
+            android:textSize="15dp"
+            android:textColor="@color/black"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="5dp"
+
+            android:layout_toRightOf="@id/account_profile"
+            android:layout_above="@id/setting_info"/>
+        <ImageView
+            android:id="@+id/account_signout"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_setting"
+            android:layout_marginBottom="5dp"
+            android:layout_toRightOf="@id/account_email"
+            android:layout_alignParentRight="true"/>
+
         <LinearLayout
+            android:id="@+id/setting_info"
             android:gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
             android:layout_toRightOf="@id/account_profile"
             android:layout_above="@id/account_follow_signout">
             <LinearLayout
@@ -81,10 +111,11 @@
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/account_recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
 
 </LinearLayout>
