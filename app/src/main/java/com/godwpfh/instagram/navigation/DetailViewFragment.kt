@@ -51,12 +51,12 @@ class DetailViewFragment : Fragment(){
                         //게시글의 주인 == 내가 팔로우하는 사람
                     //  java.lang.NullPointerException: Attempt to invoke virtual method 'java.io.File java.io.File.getParentFile()' on a null object reference
                     // 밑의 if문에 대한 에러 메시지
-                    if(snapshot.data?.get(uid) in arrayOf(firestore?.collection("users")!!.document(uid!!).collection("following"))){
+                    //if(snapshot.data?.get(uid) in arrayOf(firestore?.collection("users")!!.document(uid!!).collection("following"))){
                         snapshot.data?.get(uid)
                         var item = snapshot.toObject(ContentDTO::class.java) //ContentDTO방식으로 casting
                         contentDTOs.add(item!!)
                         contentUidList.add(snapshot.id)
-                    }
+                    //}
                 }
                 notifyDataSetChanged() //새로고침
             }
