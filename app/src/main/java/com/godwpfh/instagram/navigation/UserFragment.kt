@@ -88,7 +88,7 @@ class UserFragment : Fragment() { //내 계정에 대한 정보, 상대 계정�
             if(followDTO==null){
                 followDTO= FollowDTO()
                 followDTO!!.followingCount=1
-                followDTO!!.followers[uid!!]=true
+                followDTO!!.followings[uid!!]=true
                 followerAlarm(uid!!)
                 transaction.set(tsDocFollowing,followDTO)
                 return@runTransaction
@@ -96,11 +96,11 @@ class UserFragment : Fragment() { //내 계정에 대한 정보, 상대 계정�
             if(followDTO.followings.containsKey(uid)){ //내가 이미 팔로우한 상태
                 //팔로잉 취소
                 followDTO?.followingCount=followDTO?.followingCount-1
-                followDTO?.followers?.remove(uid)
+                followDTO?.followings?.remove(uid)
             }else{
                 //팔로잉을 하는 경우
                 followDTO?.followingCount=followDTO?.followingCount+1
-                followDTO?.followers[uid!!]=true
+                followDTO?.followings[uid!!]=true
                 followerAlarm(uid!!)
             }
             transaction.set(tsDocFollowing, followDTO)

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -40,11 +41,22 @@ class DetailViewFragment : Fragment(){
                 contentUidList.clear()
                 if(querySnapshot == null ) return@addSnapshotListener
 
-                for(snapshot in querySnapshot!!.documents){ //들어오는 값 찍기
-                    var item=snapshot.toObject(ContentDTO::class.java) //ContentDTO방식으로 casting
-                    contentDTOs.add(item!!)
-                    contentUidList.add(snapshot.id)
 
+
+                for(snapshot in querySnapshot!!.documents){ //들어오는 값 찍기
+                    System.out.println(snapshot.data);
+
+                   // if(firestore?.collection("users")!!.document(snapshot.id).toString()==firestore?.collection()) {
+                        //내가 팔로우하는 사람들이 보이게끔
+                        //게시글의 주인 == 내가 팔로우하는 사람
+                    //  java.lang.NullPointerException: Attempt to invoke virtual method 'java.io.File java.io.File.getParentFile()' on a null object reference
+                    // 밑의 if문에 대한 에러 메시지
+                    if(snapshot.data?.get(uid) in arrayOf(firestore?.collection("users")!!.document(uid!!).collection("following"))){
+                        snapshot.data?.get(uid)
+                        var item = snapshot.toObject(ContentDTO::class.java) //ContentDTO방식으로 casting
+                        contentDTOs.add(item!!)
+                        contentUidList.add(snapshot.id)
+                    }
                 }
                 notifyDataSetChanged() //새로고침
             }
@@ -62,6 +74,7 @@ class DetailViewFragment : Fragment(){
             var viewholder = (holder as CustomViewHolder).itemView
 
             //mapping 작업
+
             viewholder.detail_profile_name.text=contentDTOs!![position].userId
             Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl)
                 .into(viewholder.detail_image_content)
@@ -95,6 +108,9 @@ class DetailViewFragment : Fragment(){
                 startActivity(intent)
 
             }
+            if(itemCount==0)
+                Toast.makeText(context, "팔로우를 하여 상대방의 게시물을 확인하세요",Toast.LENGTH_LONG).show();
+
        }
 
         override fun getItemCount(): Int {
