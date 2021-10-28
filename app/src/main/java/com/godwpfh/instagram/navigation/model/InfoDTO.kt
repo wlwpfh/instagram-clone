@@ -8,5 +8,6 @@ data class InfoDTO(
     var nickname: String?=null,
     var image: String?= null,
     var website: URL?=null,
+    var name: String?=null,
     var introduce: String?=null
 )

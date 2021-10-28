@@ -7,7 +7,8 @@
 <!--개인 계정, 팔로워 등-->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="120dp">
+        android:layout_height="120dp"
+        android:layout_marginBottom="10dp">
         <ImageView
             android:id="@+id/account_profile"
             android:layout_width="100dp"
@@ -18,7 +19,7 @@
         <Button
             android:id="@+id/account_follow_signout"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="25dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="10dp"
             android:text="@string/follow"
