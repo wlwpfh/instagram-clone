@@ -68,8 +68,9 @@ class MainActivity : AppCompatActivity(),  NavigationBarView.OnItemSelectedListe
                 var uid=FirebaseAuth.getInstance().currentUser?.uid
                 bundle.putString("destinationUid",uid)
                 userFragment.arguments=bundle
-                supportFragmentManager.beginTransaction().replace(R.id.main_toolbar,settingFragment).commit()
-                supportFragmentManager.beginTransaction().replace(R.id.main_content,userFragment).commit()
+
+                supportFragmentManager.beginTransaction().replace(R.id.main_toolbar,settingFragment).replace(R.id.main_content,userFragment).commit()
+
 
                 return true
             }
