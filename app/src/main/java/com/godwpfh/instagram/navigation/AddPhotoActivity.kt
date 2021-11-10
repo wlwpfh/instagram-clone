@@ -14,6 +14,8 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import kotlinx.android.synthetic.main.activity_add_photo.*
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
  class AddPhotoActivity : AppCompatActivity() {
@@ -55,6 +57,7 @@ import java.util.*
                 }
                 }
      }
+
       fun contentUpload() { //upload방식 1.promise 2.callback
             //파일 이름 만들기
           var timestamp=SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
@@ -70,7 +73,9 @@ import java.util.*
               contentDTO.uid=auth?.currentUser?.uid
               contentDTO.userId=auth?.currentUser?.email
               contentDTO.explain=add_photo_edit.text.toString()
-              contentDTO.timestamp=System.currentTimeMillis()
+              if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                  contentDTO.timestamp= LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")).toLong()
+              }
               firestore?.collection("images")?.document()?.set(contentDTO)
               setResult(Activity.RESULT_OK)
               finish()
@@ -92,4 +97,5 @@ import java.util.*
 //           }
 //          }
       }
+
  }

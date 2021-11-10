@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_detail.view.*
 import kotlinx.android.synthetic.main.item_detail.view.*
+import java.util.*
 
 class DetailViewFragment : Fragment(){
     var firestore : FirebaseFirestore? = null
@@ -52,12 +53,13 @@ class DetailViewFragment : Fragment(){
                     //  java.lang.NullPointerException: Attempt to invoke virtual method 'java.io.File java.io.File.getParentFile()' on a null object reference
                     // 밑의 if문에 대한 에러 메시지
                     //if(snapshot.data?.get(uid) in arrayOf(firestore?.collection("users")!!.document(uid!!).collection("following"))){
-                        snapshot.data?.get(uid)
+                      //  snapshot.data?.get(uid)
                         var item = snapshot.toObject(ContentDTO::class.java) //ContentDTO방식으로 casting
                         contentDTOs.add(item!!)
                         contentUidList.add(snapshot.id)
                     //}
                 }
+                Collections.reverse(contentDTOs)
                 notifyDataSetChanged() //새로고침
             }
         }

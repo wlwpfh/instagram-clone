@@ -22,7 +22,7 @@ class EditProfileActivity : AppCompatActivity() {
     var firestore: FirebaseFirestore? = null
     var auth: FirebaseAuth? = null
 
-    var PICK_IMAGE_ALBUM = 0;
+    var PICK_IMAGE_ALBUM = 1;
     var storage: FirebaseStorage? = null
     var photoUri: Uri? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,7 +49,7 @@ class EditProfileActivity : AppCompatActivity() {
             //이걸 해도 MainActivity Home으로 간다... (ㄱ-)
         }
         btn_profile_image.setOnClickListener {  //사진 바꾸기 : 갤러리 들어가서 사진 하나 바꾸기!
-            var photoPickerIntent = Intent(Intent.ACTION_PICK)
+            var photoPickerIntent = Intent(Intent.ACTION_GET_CONTENT)
             photoPickerIntent.type = "image_profile/*"
             startActivityForResult(photoPickerIntent, PICK_IMAGE_ALBUM)
         }

@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -23,7 +24,8 @@ import com.google.firebase.storage.UploadTask
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(),  NavigationBarView.OnItemSelectedListener {
-
+        val INTERVAL_TIME:Long = 3000
+        var previous_time : Long =0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -116,6 +118,16 @@ class MainActivity : AppCompatActivity(),  NavigationBarView.OnItemSelectedListe
                 FirebaseFirestore.getInstance().collection("profileUserImage").document(uid).set(map)
 
             }
+        }
+    }
+
+    override fun onBackPressed(){
+        var current_time=System.currentTimeMillis()
+        if((current_time-previous_time)<=INTERVAL_TIME)
+            super.onBackPressed()
+        else{
+            previous_time=current_time
+            Toast.makeText(this,"한 번 더 누르면 종료됩니다",Toast.LENGTH_SHORT).show()
         }
     }
 
