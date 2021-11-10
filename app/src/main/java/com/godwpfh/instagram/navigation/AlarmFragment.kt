@@ -1,9 +1,11 @@
 package com.godwpfh.instagram.navigation
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +19,7 @@ import kotlinx.android.synthetic.main.fragment_alarm.view.*
 import kotlinx.android.synthetic.main.item_comment.view.*
 
 class AlarmFragment : Fragment(){
+    private lateinit var  callback: OnBackPressedCallback
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view= LayoutInflater.from(activity).inflate(R.layout.fragment_alarm,container, false);
 
@@ -25,6 +28,21 @@ class AlarmFragment : Fragment(){
         //어떻게 배치시킬 것인지
         view.alarmfragment_recyclerview.layoutManager=LinearLayoutManager(activity)
         return view
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callback = object  : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this,callback)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
     }
     inner class AlarmRecylcerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         var alarmDTOList : ArrayList<AlarmDTO> = arrayListOf()

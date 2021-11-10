@@ -35,6 +35,12 @@ class EditProfileActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         var uid = auth?.currentUser?.uid
 
+        //edit_profile_image.setImageURI(firestore?.collection("info")?.document(uid!!)
+        firestore?.collection("info")?.document(uid!!)?.get()?.addOnCompleteListener {
+            //
+            //task?.
+            //firesotre에 저장된 걸 통해서 내 기본 이미지를 불러와야함...
+        }
 
         btn_cancel_edit_profile.setOnClickListener { //취소를 누른 경우
 //            var userFragment=UserFragment()
@@ -49,8 +55,8 @@ class EditProfileActivity : AppCompatActivity() {
             //이걸 해도 MainActivity Home으로 간다... (ㄱ-)
         }
         btn_profile_image.setOnClickListener {  //사진 바꾸기 : 갤러리 들어가서 사진 하나 바꾸기!
-            var photoPickerIntent = Intent(Intent.ACTION_GET_CONTENT)
-            photoPickerIntent.type = "image_profile/*"
+            var photoPickerIntent = Intent(Intent.ACTION_PICK)
+            photoPickerIntent.type = "image/*"
             startActivityForResult(photoPickerIntent, PICK_IMAGE_ALBUM)
         }
         btn_update_edit_profile.setOnClickListener { //업데이트를 한 경우
@@ -81,7 +87,7 @@ class EditProfileActivity : AppCompatActivity() {
         if(requestCode==PICK_IMAGE_ALBUM){
             if(resultCode==Activity.RESULT_OK) { //사진을 선택한 경우
                 photoUri=data?.data //경로 넣기
-                image_profile.setImageURI(photoUri)
+                edit_profile_image.setImageURI(photoUri)
 
             }else{
                 finish()
@@ -93,7 +99,7 @@ class EditProfileActivity : AppCompatActivity() {
         //파일 이름 만들기
         var timestamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         var imageFileName = "IMAGE_" + timestamp + "_.png"
-        var storageRef = storage?.reference?.child("images_profile")?.child(imageFileName)
+        var storageRef = storage?.reference?.child("image_profile")?.child(imageFileName)
 
         //1.promise
         storageRef?.putFile(photoUri!!)?.continueWithTask { task: Task<UploadTask.TaskSnapshot> ->
@@ -102,7 +108,7 @@ class EditProfileActivity : AppCompatActivity() {
             var infoDTO = InfoDTO()
             infoDTO.image = uri.toString()
 
-            firestore?.collection("images_profile")?.document()?.set(infoDTO)
+            firestore?.collection("image_profile")?.document()?.set(infoDTO)
             setResult(Activity.RESULT_OK)
             finish()
         }
