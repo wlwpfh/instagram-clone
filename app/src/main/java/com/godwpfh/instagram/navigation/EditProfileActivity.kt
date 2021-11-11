@@ -4,7 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.godwpfh.instagram.MainActivity
 import com.godwpfh.instagram.R
 import com.godwpfh.instagram.navigation.model.InfoDTO
@@ -15,6 +18,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import kotlinx.android.synthetic.main.activity_add_photo.*
 import kotlinx.android.synthetic.main.activity_edit_profile.*
+import kotlinx.android.synthetic.main.fragment_user.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -25,6 +29,7 @@ class EditProfileActivity : AppCompatActivity() {
     var PICK_IMAGE_ALBUM = 1;
     var storage: FirebaseStorage? = null
     var photoUri: Uri? = null
+    val TAG : String = "로그"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
@@ -36,11 +41,26 @@ class EditProfileActivity : AppCompatActivity() {
         var uid = auth?.currentUser?.uid
 
         //edit_profile_image.setImageURI(firestore?.collection("info")?.document(uid!!)
-        firestore?.collection("info")?.document(uid!!)?.get()?.addOnCompleteListener {
-            //
-            //task?.
-            //firesotre에 저장된 걸 통해서 내 기본 이미지를 불러와야함...
-        }
+        firestore?.collection("info")?.document(uid!!)?.get()
+                ?.addOnCompleteListener { task ->
+                    val document=task.result
+                    if(task.isSuccessful){
+                        //Log.d(TAG,"Document data: ${document?.get("image")}")
+                        Glide
+                                .with(this)
+                                .load(document?.get("image"))
+                                .apply(RequestOptions()
+                                        .circleCrop())
+                                .into(edit_profile_image)
+                        //cannot cast to uri라는데?
+                    }else{
+                        Log.d(TAG, "Document get failed: ", task.exception)
+                    }
+                    //
+                    //task?.
+                    //firesotre에 저장된 걸 통해서 내 기본 이미지를 불러와야함...
+
+                }
 
         btn_cancel_edit_profile.setOnClickListener { //취소를 누른 경우
 //            var userFragment=UserFragment()
