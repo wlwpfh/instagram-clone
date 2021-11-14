@@ -60,7 +60,9 @@
 
     <ImageView
         android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
+        android:maxHeight="100dp"
+        android:scaleType="fitCenter"
         android:id="@+id/add_photo_image"
         android:layout_below="@+id/photo_toolbar_division"
         android:layout_margin="8dp"/>
@@ -69,7 +71,6 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:id="@+id/photo_edit_text"
-
         android:layout_below="@+id/photo_toolbar_division"
         android:layout_toRightOf="@id/add_photo_image"
         android:background="@color/white"
